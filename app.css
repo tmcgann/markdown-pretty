@@ -1,4 +1,4 @@
-.full-width
+.fixed-width-font
 {
-	width: 100%;
+	font-family: consolas, monospace;
 }
