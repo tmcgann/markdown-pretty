@@ -1,4 +1,72 @@
-.fixed-width-font
+body, h1, h2, h3, h4, h5, h6, span, p
+{
+	color: #333;
+	font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+	font-weight: 300;
+}
+
+
+h1, h2, h3, h4
+{
+	margin-top: 1em;
+}
+
+h1
+{
+	font-size: 54px;
+	margin-bottom: 1em;
+	text-align: center;
+}
+
+h2
+{
+	font-size: 36px;
+	margin-bottom: 0.5em;
+}
+
+h3
+{
+	font-size: 28px;
+	margin-bottom: 0.6em;
+}
+
+h4
+{
+	font-size: 22px;
+	margin-bottom: 0.71em;
+}
+
+h5
+{
+	color: #666;
+	font-size: 16px;
+	font-weight: normal;
+	margin-bottom: 0.25em;
+	text-transform: uppercase;
+}
+
+h6
+{
+	font-size: 14px;
+	font-weight: bold;
+}
+
+blockquote
+{
+	color: #4c4c4c;
+	border-left: 3px solid #d0d0d0;
+	margin-left: 12px;
+	padding: 0 12px 0 10px;
+}
+
+pre, code, .fixed-width-font
 {
 	font-family: consolas, monospace;
+	font-size: 16px;
 }
