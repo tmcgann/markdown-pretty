@@ -1,8 +1,8 @@
-home.factory('homeService', [
+components.factory('markdownService', [
 	function () {
 		// Variables
 		var
-			sampleMarkdown = 'Title\n=====\n\nSubtitle\n--------\n\nType **Markdown** here.';
+			sampleMarkdown = 'Title\n=====\n\nHeader\n--------\n\nExample **Markdown**.';
 
 		// Functions
 		var

@@ -1,18 +1,42 @@
-home.controller('homeController', ['$scope', '$log', '$sce', 'homeService',
-	function ($scope, $log, $sce, homeService) {
+home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$location', 'markdownService', 'cookieService',
+	function ($scope, $log, $sce, $window, $location, markdownService, cookieService) {
 		var htmlOutput = '';
 
-		$scope.inputText = homeService.sampleMarkdown;
+		$scope.inputText = markdownService.sampleMarkdown;
 		$scope.hasHtmlOutput = !isHtmlOutputEmpty();
-		$scope.generateHtml = generateHtml;
+		$scope.openPrintView = openPrintView;
+		$scope.updatePreviewPane = updatePreviewPane;
 
 		function generateHtml() {
-			htmlOutput = homeService.generateHtml($scope.inputText);
-			$scope.htmlOutput = htmlOutput;
-			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
+			return markdownService.generateHtml($scope.inputText);
 		}
 
 		function isHtmlOutputEmpty() {
 			return htmlOutput === null || htmlOutput === '';
+		}
+
+		function openPrintView() {
+			updatePreviewPane();
+			cookieService.saveHtmlToCookie(htmlOutput);
+			$window.open('#/print', '_blank');
+
+			// var config = {
+			// 	params: {
+			// 		html: htmlOutput
+			// 	}
+			// };
+			// $http.post("server.php", null, config)
+			// 	.success(function (data, status, headers, config) {
+			// 		$scope[resultVarName] = data;
+			// 	})
+			// 	.error(function (data, status, headers, config) {
+			// 		$scope[resultVarName] = "SUBMIT ERROR";
+			// 	});
+		}
+
+		function updatePreviewPane() {
+			htmlOutput = generateHtml();
+			$scope.htmlOutput = htmlOutput;
+			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
 		}
 	}]);

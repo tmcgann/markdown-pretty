@@ -1,7 +1,10 @@
 var app = angular.module('app', [
+		'ngCookies',
 		'ngRoute',
 		'ngSanitize',
-		'home'
+		'components',
+		'home',
+		'print'
 	]);
 
 app.config(['$routeProvider',
@@ -10,6 +13,10 @@ app.config(['$routeProvider',
 			.when('/home', {
 				templateUrl: 'home/home.html',
         		controller: 'homeController'
+			})
+			.when('/print', {
+				templateUrl: 'print/print.html',
+        		controller: 'printController'
 			})
 			.otherwise({
 				redirectTo: '/home'
