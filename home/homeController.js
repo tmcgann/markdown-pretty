@@ -2,13 +2,18 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 	function ($scope, $log, $sce, $window, $location, markdownService, storeService) {
 		var htmlOutput = '';
 
-		$scope.inputText = markdownService.sampleMarkdown;
+		$scope.inputText = initInputText();
 		$scope.hasHtmlOutput = !isHtmlOutputEmpty();
 		$scope.openPrintView = openPrintView;
 		$scope.updatePreviewPane = updatePreviewPane;
 
 		function generateHtml() {
-			return markdownService.generateHtml($scope.inputText);
+			return markdownService.generateHtml($scope.inputText);;
+		}
+
+		function initInputText() {
+			var text = storeService.getMarkdown() || markdownService.sampleMarkdown;
+			return text;
 		}
 
 		function isHtmlOutputEmpty() {
@@ -17,26 +22,19 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 
 		function openPrintView() {
 			updatePreviewPane();
-			storeService.saveHtmlToStore(htmlOutput);
+			save();
 			$window.open('#/print', '_blank');
+		}
 
-			// var config = {
-			// 	params: {
-			// 		html: htmlOutput
-			// 	}
-			// };
-			// $http.post("server.php", null, config)
-			// 	.success(function (data, status, headers, config) {
-			// 		$scope[resultVarName] = data;
-			// 	})
-			// 	.error(function (data, status, headers, config) {
-			// 		$scope[resultVarName] = "SUBMIT ERROR";
-			// 	});
+		function save() {
+			storeService.saveHtml(htmlOutput);
+			storeService.saveMarkdown($scope.inputText);
 		}
 
 		function updatePreviewPane() {
 			htmlOutput = generateHtml();
 			$scope.htmlOutput = htmlOutput;
 			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
+			save();
 		}
 	}]);

@@ -2,20 +2,31 @@ components.factory('storeService', ['localStorageService',
 	function (localStorageService) {
 		// Variables
 		var
-			htmlOutputKey = 'htmlOutpout';
+			htmlOutputKey = 'htmlOutput',
+			markdownInputKey = 'markdownInput';
 
 		// Functions
 		var
-			getHtmlFromStore = function () {
+			getHtml = function () {
 				return localStorageService.get(htmlOutputKey);
 			},
 
-			saveHtmlToStore = function (html) {
+			getMarkdown = function () {
+				return localStorageService.get(markdownInputKey);
+			},
+
+			saveHtml = function (html) {
 				localStorageService.set(htmlOutputKey, html);
+			},
+
+			saveMarkdown = function (html) {
+				localStorageService.set(markdownInputKey, html);
 			};
 
 		return {
-			getHtmlFromStore: getHtmlFromStore,
-			saveHtmlToStore: saveHtmlToStore
+			getHtml: getHtml,
+			getMarkdown: getMarkdown,
+			saveHtml: saveHtml,
+			saveMarkdown: saveMarkdown
 		};
 	}]);

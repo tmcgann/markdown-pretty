@@ -3,6 +3,6 @@ print.controller('printController', ['$scope', '$log', '$sce', 'storeService',
 		$scope.htmlOutput = getHtml();
 
 		function getHtml() {
-			return storeService.getHtmlFromStore();
+			return storeService.getHtml();
 		}
 	}]);
