@@ -1,8 +1,8 @@
-print.controller('printController', ['$scope', '$log', '$sce', 'cookieService',
-	function ($scope, $log, $sce, cookieService) {
+print.controller('printController', ['$scope', '$log', '$sce', 'storeService',
+	function ($scope, $log, $sce, storeService) {
 		$scope.htmlOutput = getHtml();
 
 		function getHtml() {
-			return cookieService.getHtmlFromCookie();
+			return storeService.getHtmlFromStore();
 		}
 	}]);

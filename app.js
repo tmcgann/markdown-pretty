@@ -2,13 +2,14 @@ var app = angular.module('app', [
 		'ngCookies',
 		'ngRoute',
 		'ngSanitize',
+		'LocalStorageModule',
 		'components',
 		'home',
 		'print'
 	]);
 
-app.config(['$routeProvider',
-	function ($routeProvider) {
+app.config(['$routeProvider', 'localStorageServiceProvider',
+	function ($routeProvider, localStorageServiceProvider) {
 		$routeProvider
 			.when('/home', {
 				templateUrl: 'home/home.html',
@@ -21,4 +22,7 @@ app.config(['$routeProvider',
 			.otherwise({
 				redirectTo: '/home'
 			});
+
+		localStorageServiceProvider
+			.setPrefix('mdPretty');
 	}]);

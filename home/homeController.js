@@ -1,5 +1,5 @@
-home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$location', 'markdownService', 'cookieService',
-	function ($scope, $log, $sce, $window, $location, markdownService, cookieService) {
+home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$location', 'markdownService', 'storeService',
+	function ($scope, $log, $sce, $window, $location, markdownService, storeService) {
 		var htmlOutput = '';
 
 		$scope.inputText = markdownService.sampleMarkdown;
@@ -17,7 +17,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 
 		function openPrintView() {
 			updatePreviewPane();
-			cookieService.saveHtmlToCookie(htmlOutput);
+			storeService.saveHtmlToStore(htmlOutput);
 			$window.open('#/print', '_blank');
 
 			// var config = {
