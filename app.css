@@ -25,6 +25,13 @@ h1
 	text-align: center;
 }
 
+h1.pretty-font, h1 span.pretty-font
+{
+	font-family: 'Great Vibes', cursive;
+	font-size: 66px;
+	/*font-weight: 400;*/
+}
+
 h2
 {
 	font-size: 36px;
@@ -77,4 +84,9 @@ pre, code, .fixed-width-font
 .no-margin-top
 {
 	margin-top: 0;
+}
+
+.ui-select-fix
+{
+	line-height: 1.8;
 }

@@ -1,23 +1,56 @@
 home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$location', 'markdownService', 'storeService',
 	function ($scope, $log, $sce, $window, $location, markdownService, storeService) {
-		var htmlOutput = '';
+		var OPTIONS_BUTTON_TEXT_HIDE = 'Hide Options',
+			OPTIONS_BUTTON_TEXT_SHOW = 'Show Options';
 
-		$scope.inputText = initInputText();
-		$scope.hasHtmlOutput = !isHtmlOutputEmpty();
-		$scope.openPrintView = openPrintView;
-		$scope.updatePreviewPane = updatePreviewPane;
+		var htmlOutputElementId = '#HtmlOutput',
+			languages = [
+				{ name: 'ASP.NET (C#)' },
+				{ name: 'Bash' },
+				{ name: 'C#' },
+				{ name: 'C' },
+				{ name: 'C++' },
+				{ name: 'C-like' },
+				{ name: 'CSS' },
+				{ name: 'Git' },
+				{ name: 'JavaScript' },
+				{ name: 'Markup' },
+				{ name: 'Objective-C' },
+				{ name: 'Perl' },
+				{ name: 'PHP' },
+				{ name: 'Python' },
+				{ name: 'Ruby' },
+				{ name: 'Sass (scss)' },
+				{ name: 'SQL' },
+				{ name: 'Swift' }
+			];
 
-		function generateHtml() {
-			return markdownService.generateHtml($scope.inputText);;
+		init();
+
+		function init() {
+			$scope.areOptionsVisible = false;
+			$scope.inputText = storeService.getMarkdown() || markdownService.sampleMarkdown;
+			$scope.optionsButtonText = OPTIONS_BUTTON_TEXT_SHOW;
+
+			$scope.language = languages[8];
+			$scope.languages = languages;
+
+			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
+			$scope.openPrintView = openPrintView;
+			$scope.toggleOptions = toggleOptions;
+			$scope.updatePreviewPane = updatePreviewPane;
+
+			fixUiSelectBug();
 		}
 
-		function initInputText() {
-			var text = storeService.getMarkdown() || markdownService.sampleMarkdown;
-			return text;
+		function fixUiSelectBug() {
+			setTimeout(function () {
+				$('div.ui-select-container button.btn.btn-default.col-sm-2.col-md-1').addClass('ui-select-fix');
+			}, 0);
 		}
 
 		function isHtmlOutputEmpty() {
-			return htmlOutput === null || htmlOutput === '';
+			return $scope.htmlOutput === undefined || $scope.htmlOutput === null || $scope.htmlOutput === '';
 		}
 
 		function openPrintView() {
@@ -27,13 +60,17 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 		}
 
 		function save() {
-			storeService.saveHtml(htmlOutput);
+			storeService.saveHtml($scope.htmlOutput);
 			storeService.saveMarkdown($scope.inputText);
 		}
 
+		function toggleOptions() {
+			$scope.areOptionsVisible = !$scope.areOptionsVisible;
+			$scope.optionsButtonText = $scope.areOptionsVisible ? OPTIONS_BUTTON_TEXT_HIDE : OPTIONS_BUTTON_TEXT_SHOW;
+		}
+
 		function updatePreviewPane() {
-			htmlOutput = generateHtml();
-			$scope.htmlOutput = htmlOutput;
+			$scope.htmlOutput = markdownService.generateHtml($scope.inputText);
 			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
 			save();
 		}

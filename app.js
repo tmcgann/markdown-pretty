@@ -3,6 +3,7 @@ var app = angular.module('app', [
 		'ngRoute',
 		'ngSanitize',
 		'LocalStorageModule',
+		'ui.select',
 		'components',
 		'home',
 		'print'

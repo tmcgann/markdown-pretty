@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-sm-12 text-center">
-		<h1>Markdown Pretty</h1>
+		<h1>Markdown <span class="pretty-font">Pretty</span></h1>
 	</div>
 </div>
 
@@ -29,29 +29,38 @@
 
 	<button type="submit" class="btn btn-primary" ng-click="updatePreviewPane()">Generate Output</button>
 	<button type="submit" class="btn btn-primary" ng-click="openPrintView()">Open Print View</button>
+	<!-- <button type="submit" class="btn btn-success" ng-click="toggleOptions()">{{optionsButtonText}}</button> -->
 </form>
 
 <br>
+
+<div ng-show="areOptionsVisible">
+	<!-- <div class="row">
+		<div class="col-sm-12 text-left">
+			<h2>Options</h2>
+		</div>
+	</div> -->
+
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title"><strong>Options</strong></h3>
+		</div>
+		<div class="panel-body">
+			<ui-select ng-model="language.selected" theme="bootstrap" reset-search-input="false" style="width: 300px;">
+				<ui-select-match placeholder="Select a Language...">{{$select.selected.name}}</ui-select-match>
+				<ui-select-choices repeat="language in languages | filter: $select.search">
+					<span ng-bind-html="language.name | highlight: $select.search"></span>
+				</ui-select-choices>
+			</ui-select>
+		</div>
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-sm-12 text-left">
 		<h2>HTML Output</h2>
 	</div>
 </div>
-
-<!-- <hr>
-
-<div class="row" ng-hide="hasHtmlOutput">
-	<div class="col-sm-12">
-		<em>No HTML output.</em>
-	</div>
-</div>
-
-<div class="row" ng-show="hasHtmlOutput">
-	<div class="col-sm-12">
-		<div ng-bind-html="htmlOutput"></div>
-	</div>
-</div> -->
 
 <div class="panel panel-default" ng-hide="hasHtmlOutput">
 	<div class="panel-body">
@@ -61,6 +70,6 @@
 
 <div class="panel panel-default" ng-show="hasHtmlOutput">
 	<div class="panel-body">
-		<div ng-bind-html="htmlOutput"></div>
+		<div id="HtmlOutput" ng-bind-html="htmlOutput"></div>
 	</div>
 </div>
