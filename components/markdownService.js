@@ -1,5 +1,5 @@
-components.factory('markdownService', [
-	function () {
+components.factory('markdownService', ['markdown',
+	function (markdown) {
 		// Variables
 		var
 			sampleMarkdown = 'Title\n=====\n\nHeader\n--------\n\nExample **Markdown**.';
