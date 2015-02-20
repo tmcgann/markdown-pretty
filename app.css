@@ -81,6 +81,13 @@ pre, code, .fixed-width-font
 	font-size: 16px;
 }
 
+textarea.standard-size
+{
+	/*height: 344px;*/
+	min-height: 80px;
+	resize: vertical;
+}
+
 .no-margin-top
 {
 	margin-top: 0;
@@ -89,6 +96,15 @@ pre, code, .fixed-width-font
 .ui-select-fix
 {
 	line-height: 1.8;
+}
+
+#HiddenEditor
+{
+	background-color: #f9f9f9;
+	margin: 0 15px 15px -15px;
+	position: fixed;
+	top: -1200px;
+	z-index: 10;
 }
 
 
