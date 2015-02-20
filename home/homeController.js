@@ -5,15 +5,18 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 			OPTIONS_BUTTON_TEXT_SHOW = 'Show Options';
 
 		// UI element IDs
-		var hiddenEditorId = '#HiddenEditor',
+		var editorId = '#Editor',
+			expandableEditorId = '#ExpandableEditor',
 			markdownInputId = '#MarkdownInput',
-			hiddenMarkdownInputId = '#HiddenMarkdownInput',
+			expandableMarkdownInputId = '#ExpandableMarkdownInput',
 			htmlOutputElementId = '#HtmlOutput';
 
 		// jQuery objects
-		var $hiddenEditor = $(hiddenEditorId),
-			$hiddenMarkdownTextArea = $(hiddenMarkdownInputId),
-			$markdownTextArea = $(markdownInputId);
+		var $editor = $(editorId),
+			$expandableEditor = $(expandableEditorId),
+			$expandableMarkdownTextArea = $(expandableMarkdownInputId),
+			$markdownTextArea = $(markdownInputId),
+			$w = $(window);
 
 		// objects
 		var languages = [
@@ -38,37 +41,47 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 			];
 
 		// state values
-		var isHiddenEditorOpen = false;
+		var isExpandableEditorButtonVisible = false,
+			isExpandableEditorOpen = false;
 
 		// other values
-		var hiddenEditorAnimationDuration = 400,
-			hiddenEditorOpenTopValue = 0 + 'px';
+		var expandableEditorAnimationDuration = 400,
+			expandableEditorEase = 'linear',
+			expandableEditorButtonAnimationDuration = 200,
+			expandableEditorOpenTopValue = 0 + 'px';
 
 		init();
 
 		function init() {
 			primeScope();
 			fixUiSelectBug();
-			configureHiddenEditor();
+			configureExpandableEditor();
 		}
 
-		function calcHiddenEditorClosedTopValue() {
+		function calcExpandableEditorHiddenTopValue() {
+			var expandableEditorHeight = -$expandableEditor.outerHeight();
+			return expandableEditorHeight + 'px';
+		}
+
+		function calcExpandableEditorClosedTopValue() {
 			var openCloseButtonHeight = 32,
-				hiddenEditorClosedTopValue = -($hiddenEditor.height() - openCloseButtonHeight);
-			return hiddenEditorClosedTopValue + 'px';
+				expandableEditorClosedTopValue = -($expandableEditor.height() - openCloseButtonHeight);
+			return expandableEditorClosedTopValue + 'px';
 		}
 
-		function closeHiddenEditor() {
-			$hiddenEditor.animate({ top: calcHiddenEditorClosedTopValue() }, hiddenEditorAnimationDuration, 'linear');
-			isHiddenEditorOpen = false;
+		function closeExpandableEditor() {
+			$expandableEditor.animate({ top: calcExpandableEditorClosedTopValue() }, expandableEditorAnimationDuration, expandableEditorEase);
+			isExpandableEditorOpen = false;
 		}
 
-		function configureHiddenEditor() {
-			$hiddenMarkdownTextArea
+		function configureExpandableEditor() {
+			$expandableMarkdownTextArea
 				.width($markdownTextArea.width())
 				.height($markdownTextArea.height());
 
-			$hiddenEditor.css({ top: calcHiddenEditorClosedTopValue() });
+			$expandableEditor.css({ top: calcExpandableEditorHiddenTopValue() });
+
+			$w.scroll(toggleExpandableEditorButton);
 		}
 
 		function fixUiSelectBug() {
@@ -77,13 +90,19 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 			}, 0);
 		}
 
+		function hideExpandableEditorButton() {
+			$expandableEditor.animate({ top: calcExpandableEditorHiddenTopValue() }, expandableEditorButtonAnimationDuration, expandableEditorEase);
+			isExpandableEditorButtonVisible = false;
+			isExpandableEditorOpen = false;
+		}
+
 		function isHtmlOutputEmpty() {
 			return $scope.htmlOutput === undefined || $scope.htmlOutput === null || $scope.htmlOutput === '';
 		}
 
-		function openHiddenEditor() {
-			$hiddenEditor.animate({ top: hiddenEditorOpenTopValue }, hiddenEditorAnimationDuration, 'linear');
-			isHiddenEditorOpen = true;
+		function openExpandableEditor() {
+			$expandableEditor.animate({ top: expandableEditorOpenTopValue }, expandableEditorAnimationDuration, expandableEditorEase);
+			isExpandableEditorOpen = true;
 		}
 
 		function openPrintView() {
@@ -102,7 +121,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 
 			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
 			$scope.openPrintView = openPrintView;
-			$scope.toggleHiddenEditor = toggleHiddenEditor;
+			$scope.toggleExpandableEditor = toggleExpandableEditor;
 			$scope.toggleOptions = toggleOptions;
 			$scope.updatePreviewPane = updatePreviewPane;
 			$scope.updateAndClose = updateAndClose;
@@ -113,11 +132,28 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 			storeService.saveMarkdown($scope.inputText);
 		}
 
-		function toggleHiddenEditor() {
-			if (isHiddenEditorOpen) {
-				closeHiddenEditor();
+		function showExpandableEditorButton() {
+			$expandableEditor.animate({ top: calcExpandableEditorClosedTopValue() }, expandableEditorButtonAnimationDuration, expandableEditorEase);
+			isExpandableEditorButtonVisible = true;
+		}
+
+		function toggleExpandableEditor() {
+			if (isExpandableEditorOpen) {
+				closeExpandableEditor();
 			} else {
-				openHiddenEditor();
+				openExpandableEditor();
+			}
+		}
+
+		function toggleExpandableEditorButton() {
+			var scrollPosition = $w.scrollTop(),
+				editorBottom = $editor.offset().top + $editor.height(),
+				isEditorVisible = scrollPosition < editorBottom;
+
+			if (isEditorVisible && isExpandableEditorButtonVisible) {
+				hideExpandableEditorButton();
+			} else if (!isEditorVisible && !isExpandableEditorButtonVisible) {
+				showExpandableEditorButton();
 			}
 		}
 
@@ -128,7 +164,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 
 		function updateAndClose() {
 			updatePreviewPane();
-			closeHiddenEditor();
+			closeExpandableEditor();
 		}
 
 		function updatePreviewPane() {

@@ -98,7 +98,7 @@ textarea.standard-size
 	line-height: 1.8;
 }
 
-#HiddenEditor
+#ExpandableEditor
 {
 	background-color: #f9f9f9;
 	margin: 0 15px 15px -15px;
