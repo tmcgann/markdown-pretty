@@ -81,10 +81,20 @@ pre, code, .fixed-width-font
 	font-size: 16px;
 }
 
-textarea.standard-size
+textarea.small
 {
-	/*height: 344px;*/
+	height: 160px;
 	min-height: 80px;
+}
+
+textarea.standard
+{
+	height: 344px;
+	min-height: 80px;
+}
+
+textarea.vertical-resize
+{
 	resize: vertical;
 }
 
@@ -100,13 +110,39 @@ textarea.standard-size
 
 #ExpandableEditor
 {
-	background-color: #f9f9f9;
+	background-color: #fafafa;
 	margin: 0 15px 15px -15px;
 	position: fixed;
 	top: -1200px;
 	z-index: 10;
 }
 
+img#ExpandableEditorButton
+{
+	position: absolute;
+	margin: auto;
+	left: 0;
+	right: 0;
+	bottom: -26px;
+}
+
+div#ExpandableEditorButton, span#ExpandableEditorButton
+{
+	background-image: url('../img/expand-up.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -33px;
+	line-height: 32px;
+}
+
+#ExpandableEditorButton:hover
+{
+	background-image: url('../img/expand-hover.png');
+	background-repeat: no-repeat;
+}
 
 /*************************************************
 *** Print

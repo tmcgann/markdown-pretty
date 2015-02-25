@@ -1,59 +1,29 @@
-home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$location', 'markdownService', 'storeService',
-	function ($scope, $log, $sce, $window, $location, markdownService, storeService) {
-		// UI text
-		var OPTIONS_BUTTON_TEXT_HIDE = 'Hide Options',
-			OPTIONS_BUTTON_TEXT_SHOW = 'Show Options';
-
-		// UI element IDs
-		var editorId = '#Editor',
-			expandableEditorId = '#ExpandableEditor',
-			markdownInputId = '#MarkdownInput',
-			expandableMarkdownInputId = '#ExpandableMarkdownInput',
-			htmlOutputElementId = '#HtmlOutput';
+home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$location', 'homeService', 'markdownService', 'storeService',
+	function ($scope, $log, $sce, $window, $location, homeService, markdownService, storeService) {
+		var ui = homeService.ui;
 
 		// jQuery objects
-		var $editor = $(editorId),
-			$expandableEditor = $(expandableEditorId),
-			$expandableMarkdownTextArea = $(expandableMarkdownInputId),
-			$markdownTextArea = $(markdownInputId),
+		var $editor = $(ui.ids.editor),
+			$expandableEditor = $(ui.ids.expandableEditor),
+			$expandableMarkdownTextArea = $(ui.ids.expandableMarkdownInput),
+			$markdownTextArea = $(ui.ids.markdownInput),
 			$w = $(window);
 
-		// objects
-		var languages = [
-				{ name: 'ASP.NET (C#)' },
-				{ name: 'Bash' },
-				{ name: 'C#' },
-				{ name: 'C' },
-				{ name: 'C++' },
-				{ name: 'C-like' },
-				{ name: 'CSS' },
-				{ name: 'Git' },
-				{ name: 'JavaScript' },
-				{ name: 'Markup' },
-				{ name: 'Objective-C' },
-				{ name: 'Perl' },
-				{ name: 'PHP' },
-				{ name: 'Python' },
-				{ name: 'Ruby' },
-				{ name: 'Sass (scss)' },
-				{ name: 'SQL' },
-				{ name: 'Swift' }
-			];
-
-		// state values
+		// state variables
 		var isExpandableEditorButtonVisible = false,
 			isExpandableEditorOpen = false;
 
 		// other values
-		var expandableEditorAnimationDuration = 400,
+		var expandableEditorDuration = 300,
 			expandableEditorEase = 'linear',
-			expandableEditorButtonAnimationDuration = 200,
+			expandableEditorButtonDuration = 200,
 			expandableEditorOpenTopValue = 0 + 'px';
 
 		init();
 
 		function init() {
 			primeScope();
+			updatePreviewPane();
 			fixUiSelectBug();
 			configureExpandableEditor();
 		}
@@ -70,7 +40,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 		}
 
 		function closeExpandableEditor() {
-			$expandableEditor.animate({ top: calcExpandableEditorClosedTopValue() }, expandableEditorAnimationDuration, expandableEditorEase);
+			$expandableEditor.animate({ top: calcExpandableEditorClosedTopValue() }, expandableEditorDuration, expandableEditorEase);
 			isExpandableEditorOpen = false;
 		}
 
@@ -91,7 +61,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 		}
 
 		function hideExpandableEditorButton() {
-			$expandableEditor.animate({ top: calcExpandableEditorHiddenTopValue() }, expandableEditorButtonAnimationDuration, expandableEditorEase);
+			$expandableEditor.animate({ top: calcExpandableEditorHiddenTopValue() }, expandableEditorButtonDuration, expandableEditorEase);
 			isExpandableEditorButtonVisible = false;
 			isExpandableEditorOpen = false;
 		}
@@ -101,7 +71,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 		}
 
 		function openExpandableEditor() {
-			$expandableEditor.animate({ top: expandableEditorOpenTopValue }, expandableEditorAnimationDuration, expandableEditorEase);
+			$expandableEditor.animate({ top: expandableEditorOpenTopValue }, expandableEditorDuration, expandableEditorEase);
 			isExpandableEditorOpen = true;
 		}
 
@@ -114,10 +84,10 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 		function primeScope() {
 			$scope.areOptionsVisible = false;
 			$scope.inputText = storeService.getMarkdown() || markdownService.sampleMarkdown;
-			$scope.optionsButtonText = OPTIONS_BUTTON_TEXT_SHOW;
+			$scope.optionsButtonText = ui.text.OPTIONS_BUTTON_TEXT_SHOW;
 
-			$scope.language = languages[8];
-			$scope.languages = languages;
+			$scope.language = homeService.codeLanguages[8];
+			$scope.languages = homeService.codeLanguages;
 
 			$scope.hasHtmlOutput = !isHtmlOutputEmpty();
 			$scope.openPrintView = openPrintView;
@@ -133,7 +103,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 		}
 
 		function showExpandableEditorButton() {
-			$expandableEditor.animate({ top: calcExpandableEditorClosedTopValue() }, expandableEditorButtonAnimationDuration, expandableEditorEase);
+			$expandableEditor.animate({ top: calcExpandableEditorClosedTopValue() }, expandableEditorButtonDuration, expandableEditorEase);
 			isExpandableEditorButtonVisible = true;
 		}
 
@@ -159,7 +129,7 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 
 		function toggleOptions() {
 			$scope.areOptionsVisible = !$scope.areOptionsVisible;
-			$scope.optionsButtonText = $scope.areOptionsVisible ? OPTIONS_BUTTON_TEXT_HIDE : OPTIONS_BUTTON_TEXT_SHOW;
+			$scope.optionsButtonText = $scope.areOptionsVisible ? ui.text.OPTIONS_BUTTON_TEXT_HIDE : ui.text.OPTIONS_BUTTON_TEXT_SHOW;
 		}
 
 		function updateAndClose() {
@@ -173,3 +143,8 @@ home.controller('homeController', ['$scope', '$log', '$sce', '$window', '$locati
 			save();
 		}
 	}]);
+
+// TODO
+//
+// - Kill events (e.g. scroll event) on controller disposal
+// - Double clicking a word/line/header in the output section scrolls to that same subject in the textarea(s)
